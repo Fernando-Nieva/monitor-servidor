@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'librehardwaremonitor' => [
+        'url' => env('LIBRE_HARDWARE_MONITOR_URL', 'http://127.0.0.1:8085/data.json'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
