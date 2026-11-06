@@ -132,7 +132,15 @@ Windows 10 Pro (versión 10.0.19045), con PHP 8.5 y Laravel 13.
 
 La clase `MSAcpi_ThermalZoneTemperature` está en el espacio de nombres `root/wmi`, y Windows solo permite leerla con permisos de administrador. Como `php artisan serve` corre con un usuario común, la consulta falla y el dato queda en `null`. Además, muchas placas madre no informan esa zona térmica, así que a veces tampoco aparece como administrador.
 
-Como administrador sí aparece un valor, pero en el equipo de pruebas no cambiaba con la CPU al 100 % (rondaba los 30 °C): es una zona térmica ACPI de la placa, no la temperatura del procesador. Por eso el proyecto lee la temperatura real desde LibreHardwareMonitor.
+Comparación en el equipo de pruebas:
+
+| Terminal | Resultado |
+|---|---|
+| Usuario común | `Acceso denegado` → "No disponible" |
+| Administrador, en reposo | `TZ00_0`: 27,9 °C · `TZ01_0`: 29,9 °C |
+| Administrador, CPU al 100 % durante 20 s | `TZ00_0`: 27,9 °C · `TZ01_0`: 29,9 °C |
+
+Como administrador sí aparece un valor, pero no cambia con la carga: son zonas térmicas ACPI de la placa, no la temperatura del procesador. Por eso el proyecto lee la temperatura real desde LibreHardwareMonitor.
 
 **2. ¿Por qué el script de PowerShell nunca debe incluir datos que vengan del usuario?**
 
