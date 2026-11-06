@@ -126,6 +126,38 @@ php artisan test
 
 Windows 10 Pro (versión 10.0.19045), con PHP 8.5 y Laravel 13.
 
+### Capturas
+
+#### Vista `/servidor` funcionando
+
+![Vista /servidor del monitor](docs/capturas/servidor.png)
+
+La página muestra los datos que lee `ServerMetrics`:
+
+- **Medidores:** uso de CPU (74 %), memoria (78 %, 3,5 GB libres de 15,9 GB), disco (92,2 %, 37,2 GB libres de 479,4 GB) y temperatura. Cada uno se marca como Normal, Elevado o Crítico según el valor.
+- **Información del sistema:** nombre del equipo (`DESKTOP-G0IOSH8`), sistema operativo (`Windows NT 10.0`), versión de PHP (`8.5.7`) y tiempo encendido (2 d 23 h 14 min).
+- **Temperatura:** LibreHardwareMonitor no estaba abierto, así que la temperatura del CPU figura como "Requiere LibreHardwareMonitor". El medidor muestra la zona térmica ACPI de la placa (29,9 °C), marcada como "Referencial" (ver la respuesta 1).
+- **Actualización automática:** el estado "Conectando…" aparece porque en la captura no estaba corriendo Reverb. En ese caso la página consulta `/api/metrics` cada 5 segundos (polling) y actualiza los valores sin recargar.
+
+#### Respuesta de `/api/metrics`
+
+![Respuesta JSON de /api/metrics](docs/capturas/api-metrics.png)
+
+`GET /api/metrics` devuelve las mismas métricas en JSON:
+
+| Campo | Valor en la captura | Significado |
+|---|---|---|
+| `hostname` | `DESKTOP-G0IOSH8` | Nombre del equipo |
+| `os` | `Windows NT 10.0` | Sistema operativo |
+| `php` | `8.5.7` | Versión de PHP |
+| `disk` | 479,4 GB totales, 37,2 libres, 92,2 % usado | Disco donde está el proyecto |
+| `memory` | 16278 MB totales, 3806 disponibles, 76,6 % usado | Memoria RAM |
+| `cpu_pct` | `76` | Uso de CPU en % |
+| `uptime_s` | `256478` | Segundos desde el último encendido |
+| `cpu_temp_c` | `null` | Temperatura del procesador: queda en `null` porque LibreHardwareMonitor no estaba abierto |
+| `board_temp_c` | `29.9` | Zona térmica ACPI de la placa (dato referencial) |
+| `at` | `2026-11-06T02:54:11+00:00` | Momento de la lectura |
+
 ### Respuestas a las preguntas
 
 **1. ¿Por qué la temperatura suele aparecer como "No disponible" en Windows?**
